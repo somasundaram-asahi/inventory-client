@@ -1,0 +1,28 @@
+body{
+    margin: 0;
+}
+.mainWrapper{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.mainContainer{
+    background-color: aliceblue;
+    border: 1px solid;
+    min-width: 30vw;
+    padding: 3%;
+}
+.inputStyles{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.labelStyles{
+    margin-right: 10px;
+}
+
+.viewWrapper{
+    margin-top: 30px
+}
