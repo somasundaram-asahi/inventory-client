@@ -72,7 +72,7 @@ public class InventoryController {
 		return itemrequest;
 	}
 
-	// sent with approve status
+	// sent with approve status from warehouse to production
 	@PutMapping("/item-request")
 	public ResponseEntity<?> updateItemRequest(@RequestBody ItemRequest itemRequest) {
 		ItemRequest result;
@@ -98,7 +98,7 @@ public class InventoryController {
 		return itemRequests;
 	}
 
-	// send with accepted status
+	// send with accepted status production to ?
 	@PutMapping("/item-request-approval")
 	public ResponseEntity<?> itemVerificationByProductionTeam(@RequestBody ItemRequest itemRequest) {
 		if (itemRequest.getStatus().equalsIgnoreCase("DECLINED")) {

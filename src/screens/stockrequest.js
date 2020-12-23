@@ -1,43 +1,95 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from "axios";
 import 'antd/dist/antd.css';
 import './index.css';
 import './stock.css';
+import {
+    Form,
+    Input,
+    Button,
+    Select,
+    Col,
+    Card,
+} from 'antd';
 
 const StockRequestPage = (props) => {
     const [formValues, setFormValues] = useState({
-        itemname: '',
-        itemnumber:'',
-        quantity:''
+        products: [],
+        itemCode:"",
+        quantity:"",
+        id:"",
     });
 
-    const handleChange = (e)=>{
-        setFormValues({...formValues,[e.target.name]:e.target.value})
+    useEffect(() => {
+        axios.get('/item')
+        .then(response => {
+            const resData = response.data;
+            setFormValues({...formValues,products:resData});
+        })
+    },[]); // eslint-disable-next-line
+
+    const handleChange = (e) => {
+        setFormValues({ ...formValues, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = (e)=>{
-        e.preventDefault();
-        props.history.push("/screenone",[formValues])
-    }
+    const handleselectedProduct = (data,event)=>{
+        const item = formValues.products.find((item)=>item.id==data); // eslint-disable-next-line
+        setFormValues({...formValues,itemCode:item.code,id:item.id});
 
+    }
+ const handleData = () =>{
+    const data = {
+        itemCode: formValues.itemCode,
+        itemId:formValues.id,
+        quantity:formValues.quantity,
+        requestedBy: "PRODUCTION",
+        status: "REQUESTED"
+    };
+    axios.post('/item-request', data)
+        .then(response => {
+            if(response.status == 201){
+                props.history.push('/reviewtable');
+            }
+        });
+ }
     return (
-        <div className="mainWrapper">
-            <form onSubmit ={handleSubmit}>
-                <div >
-                <div>
-                <label htmlFor="name" className="labelStyles">Product Name:</label>
-                <input type="text" id="name" name="itemname" value={formValues.itemname} onChange={handleChange} />
-                </div>
-                <div className="inputStyles">
-                <label htmlFor="itemnumber" className="labelStyles">Product Number:</label>
-                <input type="text" id="itemnumber" name="itemnumber" value={formValues.itemnumber} onChange={handleChange}/>
-                </div>
-                <div className="inputStyles">
-                <label htmlFor="quantity" className="labelStyles">Quantity:</label>
-                <input type="text" id="quantity" name="quantity" value={formValues.quantity} onChange={handleChange}/>
-                </div>
-                <button type="submit" value="Submit" onClick={()=>{props.history.push("/request",formValues)}}>Submit</button>
-                </div>
-            </form>
+        <div>
+            <Col span={16}>
+                <Card>
+                <Form
+                    labelCol={{ span: 4 }}
+                    wrapperCol={{ span: 14 }}
+                    layout="horizontal"
+                >
+                     <Form.Item
+                        name="itemId"
+                        hidden
+                    />
+                    <Form.Item name="ItemName" label="Item Name:">
+                        <Select onChange={handleselectedProduct}>
+                            {formValues.products && formValues.products.map((product)=>{
+                               return <Select.Option 
+                                key={product.id}
+                                value = {product.id}
+                                >
+                                    {product.name}
+                                </Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="Item ID:">
+                        <Input value={formValues.itemCode} onChange={handleChange} />
+                    </Form.Item>
+                    <Form.Item label=" Quantity:">
+                        <Input name="quantity" value={formValues.quantity} onChange={handleChange} />
+                    </Form.Item>
+                    <Form.Item >
+                        <Button type="primary" style={{ marginLeft: "285px" }} onClick={handleData}>Submit</Button>
+                    </Form.Item>
+                </Form>
+                </Card>
+            </Col>
+            
         </div>
     );
 };

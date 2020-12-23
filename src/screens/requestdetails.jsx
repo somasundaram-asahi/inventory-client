@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./stock.css"; 
 
 const RequestDetails = (props) => {
-    console.log(props.location.state);
+    // console.log(props.location.state);
     const {itemname,itemnumber,quantity} = props.location.state;
     return (
         <div className="mainWrapper">
