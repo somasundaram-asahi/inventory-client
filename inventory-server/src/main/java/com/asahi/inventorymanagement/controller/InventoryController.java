@@ -54,6 +54,7 @@ public class InventoryController {
 	public ResponseEntity<?> getItemRequest(@RequestBody ItemRequest itemRequest) {
 		Integer availableItem = itemRepository.findById(itemRequest.getItemId()).get().getQuantity();
 		itemRequest.setItemAvailable(availableItem);
+		itemRequest.setRequestedBy("PRODUCTION");
 		ItemRequest result = itemRequestRepository.save(itemRequest);
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
