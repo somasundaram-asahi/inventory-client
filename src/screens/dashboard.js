@@ -24,10 +24,10 @@ const { Header, Content, Sider } = Layout;
                                     <Menu.Item key="/stockrequest"><Link to="/stockrequest">Request-Form</Link></Menu.Item>
                                     <Menu.Item key="/statusdetails"><Link to="/statusdetails">Status</Link></Menu.Item>
                                 </SubMenu>
-                                <SubMenu key="sub2" icon={<UserOutlined />} title="Review">
-                                <Menu.Item key="/reviewtable"><Link to="/reviewtable">Review</Link></Menu.Item>
+                                <SubMenu key="sub2" icon={<UserOutlined />} title="WareHouse Team">
+                                <Menu.Item key="/reviewtable"><Link to="/reviewtable">Review-request</Link></Menu.Item>
                                 </SubMenu>
-                                <SubMenu key="sub3" icon={<UserOutlined />} title="Verify">
+                                <SubMenu key="sub3" icon={<UserOutlined />} title="Quality-Analyst">
                                     {/* <Menu.Item key="9">option1</Menu.Item> */}
                                 </SubMenu>
                             </Menu>

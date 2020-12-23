@@ -58,6 +58,19 @@ public class InventoryController {
 		ItemRequest result = itemRequestRepository.save(itemRequest);
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
+	
+
+	@GetMapping("/item-requested")
+	public List<ItemRequest> getItemRequest() {
+		List<ItemRequest>  itemrequest = itemRequestRepository.fetchRequestedItems();
+		return itemrequest;
+	}
+	
+	@GetMapping("/item-approved")
+	public List<ItemRequest> getItemApproved() {
+		List<ItemRequest>  itemrequest = itemRequestRepository.fetchApprovedItems();
+		return itemrequest;
+	}
 
 	// sent with approve status
 	@PutMapping("/item-request")
@@ -130,10 +143,23 @@ public class InventoryController {
 		List<Sales> salesProducts = salesRepository.findAll();
 		return salesProducts;
 	}
+	
+	@GetMapping("/product-in-testing")
+	public List<Product> getProductInTested() {
+		List<Product>  productInTesting = productRepository.fetchProductsInTesting();
+		return productInTesting;
+	}
+	
+	@GetMapping("/product-approved")
+	public List<Product> getProductApproved() {
+		List<Product>  productApproved = productRepository.fetchProductsApproved();
+		return productApproved;
+	}
 
 	@PutMapping("/sales-product-shipment")
 	public ResponseEntity<?> updateSalesProductStatus(@RequestBody Sales salesProduct) {
 		Sales updatedSalesProduct = salesRepository.save(salesProduct);
 		return new ResponseEntity<>(updatedSalesProduct, HttpStatus.OK);
 	}
+	
 }

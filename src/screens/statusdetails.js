@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 
 const ReviewTable = () => {
     const columns = [
@@ -23,7 +23,24 @@ const ReviewTable = () => {
             title: 'Status',
             dataIndex: 'status',
         },
+        {
+            title: 'Approval',
+            dataIndex: 'key',
+            render: (record) => (
+                <div>
+                    <Button type='primary'  onClick={() => console.log(record)}>
+                        Accept
+                    </Button>
+                    <Button type='danger' style={{marginLeft:"10px"}} onClick={() => console.log(record)}>
+                        Decline
+                    </Button>
+                </div>
+            ),
+
+
+        }
     ];
+
     const data = [
         {
             key: '1',
@@ -51,7 +68,7 @@ const ReviewTable = () => {
         },
     ];
     return (
-        <Table columns={columns} dataSource={data} size="middle" />
+        <Table columns={columns} dataSource={data} align="middle"/>
     )
 }
 export default ReviewTable;
