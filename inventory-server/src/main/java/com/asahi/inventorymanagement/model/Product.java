@@ -10,24 +10,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "itemRequest")
+@Table(name = "product")
 @Getter
 @Setter
-public class ItemRequest {
+public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String itemCode;
+	private String name;
 
 	private Integer quantity;
 
-	private String RequestedBy;
-
 	private String status;
 
-	private Long itemId;
-
-	private Integer itemAvailable;
 }

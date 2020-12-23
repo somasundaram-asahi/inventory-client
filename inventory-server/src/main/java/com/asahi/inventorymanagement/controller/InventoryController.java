@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,64 +15,124 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.asahi.inventorymanagement.model.Item;
 import com.asahi.inventorymanagement.model.ItemRequest;
+import com.asahi.inventorymanagement.model.Product;
+import com.asahi.inventorymanagement.model.Sales;
 import com.asahi.inventorymanagement.repository.ItemRepository;
 import com.asahi.inventorymanagement.repository.ItemRequestRepository;
+import com.asahi.inventorymanagement.repository.ProductRepository;
+import com.asahi.inventorymanagement.repository.SalesRepository;
 import com.asahi.inventorymanagement.service.InventoryService;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api")
 public class InventoryController {
-	
+
 	@Autowired
 	private ItemRequestRepository itemRequestRepository;
-	
+
 	@Autowired
 	private ItemRepository itemRepository;
-	
+
 	@Autowired
 	private InventoryService inventoryService;
-	
+
+	@Autowired
+	private ProductRepository productRepository;
+
+	@Autowired
+	private SalesRepository salesRepository;
+
 	@GetMapping("/item")
-	public List<Item> getAllItem(){
+	public List<Item> getAllItem() {
 		List<Item> items = itemRepository.findAll();
 		return items;
 	}
-	
-	//sent with requested status
+
+	// sent with requested status
 	@PostMapping("/item-request")
-    public ResponseEntity<?> getItemRequest(@RequestBody ItemRequest itemRequest) {
+	public ResponseEntity<?> getItemRequest(@RequestBody ItemRequest itemRequest) {
+		Integer availableItem = itemRepository.findById(itemRequest.getItemId()).get().getQuantity();
+		itemRequest.setItemAvailable(availableItem);
 		ItemRequest result = itemRequestRepository.save(itemRequest);
-        return new ResponseEntity<>(result, HttpStatus.CREATED);
-    }
-	
-	//sent with approve status
+		return new ResponseEntity<>(result, HttpStatus.CREATED);
+	}
+
+	// sent with approve status
 	@PutMapping("/item-request")
-	public ResponseEntity<?> updateItemRequest(@RequestBody ItemRequest itemRequest){	
+	public ResponseEntity<?> updateItemRequest(@RequestBody ItemRequest itemRequest) {
 		ItemRequest result;
-		if(itemRequest.getStatus().equals("APPROVED")) {
+		if (itemRequest.getStatus().equalsIgnoreCase("APPROVED")) {
 			inventoryService.updateQuantityInItem(itemRequest);
 			result = itemRequestRepository.save(itemRequest);
-		}else {
-			//send notification
+		} else {
+			// send notification
 			result = itemRequestRepository.save(itemRequest);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Requested qunatity are not available");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Requested quantity are not available");
 		}
-				
-        return new ResponseEntity<>(result, HttpStatus.OK); 
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/item-request-list")
-	public List<ItemRequest> itemRequestList(){
+	public List<ItemRequest> itemRequestList() {
 		List<ItemRequest> itemRequests = itemRequestRepository.findAll();
+		for (ItemRequest itemRequest : itemRequests) {
+			itemRequest.setItemAvailable(itemRepository.findById(itemRequest.getItemId()).get().getQuantity());
+			;
+		}
 		return itemRequests;
 	}
-	
-	//send with accepted status
-	@PutMapping("/item-request-approve")
-	public ResponseEntity<?> productionVerify(@RequestBody ItemRequest itemRequest){
+
+	// send with accepted status
+	@PutMapping("/item-request-approval")
+	public ResponseEntity<?> itemVerificationByProductionTeam(@RequestBody ItemRequest itemRequest) {
+		if (itemRequest.getStatus().equalsIgnoreCase("DECLINED")) {
+			// send mail to warehouse team
+			// again rerequest the same item
+			itemRequest.setStatus("REQUESTED");
+		} else {
+			// the manufacturing team will prepare the product and the product table will
+			// have an entry now with the finished product
+		}
 		ItemRequest result = itemRequestRepository.save(itemRequest);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	// Hardcoded values will have the status - Testing
+	@GetMapping("/products")
+	public List<Product> getAllManufacturedProduct() {
+		List<Product> products = productRepository.findAll();
+		return products;
+	}
+
+	@PutMapping("/finished-product-approval")
+	public ResponseEntity<?> updateProductStatus(@RequestBody Product productDetails) {
+		if (productDetails.getStatus().equalsIgnoreCase("APPROVED")) {
+			Sales salesDetails = new Sales();
+			salesDetails.setProductId(productDetails.getId());
+			salesDetails.setProductName(productDetails.getName());
+			salesDetails.setStatus("RECEIVED");
+			salesRepository.save(salesDetails);
+			// move the product to sales table
+		} else {
+			// send mail saying having some rework
+			// the manufacturing team will be assigned for reworking
+		}
+
+		Product product = productRepository.save(productDetails);
+		return new ResponseEntity<>(product, HttpStatus.OK);
+	}
+
+	@GetMapping("/sales")
+	public List<Sales> getAllSalesProduct() {
+		List<Sales> salesProducts = salesRepository.findAll();
+		return salesProducts;
+	}
+
+	@PutMapping("/sales-product-shipment")
+	public ResponseEntity<?> updateSalesProductStatus(@RequestBody Sales salesProduct) {
+		Sales updatedSalesProduct = salesRepository.save(salesProduct);
+		return new ResponseEntity<>(updatedSalesProduct, HttpStatus.OK);
+	}
 }

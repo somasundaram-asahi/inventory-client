@@ -7,27 +7,22 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.Getter;
+
 import lombok.Setter;
 
 @Entity
-@Table(name = "itemRequest")
+@Table(name = "sales")
 @Getter
 @Setter
-public class ItemRequest {
+public class Sales {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String itemCode;
+	private Long productId;
 
-	private Integer quantity;
-
-	private String RequestedBy;
+	private String productName;
 
 	private String status;
-
-	private Long itemId;
-
-	private Integer itemAvailable;
 }

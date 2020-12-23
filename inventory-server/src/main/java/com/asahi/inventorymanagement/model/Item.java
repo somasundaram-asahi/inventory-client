@@ -10,18 +10,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="item")
+@Table(name = "item")
 @Getter
 @Setter
 public class Item {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-	
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
 	private String name;
-	
+
 	private String code;
-	
+
 	private Integer quantity;
-	
+
 }

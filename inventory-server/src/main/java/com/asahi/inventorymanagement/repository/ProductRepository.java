@@ -3,9 +3,9 @@ package com.asahi.inventorymanagement.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.asahi.inventorymanagement.model.Item;
+import com.asahi.inventorymanagement.model.Product;
 
 @Repository
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
 }
