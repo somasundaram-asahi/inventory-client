@@ -36,7 +36,6 @@ const ReviewTable = (props) => {
                     refreshPage()
                     const result = response.data;
                     setReview({ ...review, list: result })
-                    console.log(response.data);
                 })
         } else {
             props.history.push('/statusdetails');
@@ -54,7 +53,6 @@ const ReviewTable = (props) => {
                     refreshPage()
                     const result = response.data;
                     setReview({ ...review, list: result })
-                    console.log(response.data);
                 })
         }
     }

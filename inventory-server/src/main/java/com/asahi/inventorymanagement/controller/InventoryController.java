@@ -75,17 +75,16 @@ public class InventoryController {
 	// sent with approve status from warehouse to production
 	@PutMapping("/item-request")
 	public ResponseEntity<?> updateItemRequest(@RequestBody ItemRequest itemRequest) {
-		ItemRequest result;
+		ResponseEntity<?> result;
 		if (itemRequest.getStatus().equalsIgnoreCase("APPROVED")) {
-			inventoryService.updateQuantityInItem(itemRequest);
-			result = itemRequestRepository.save(itemRequest);
+			result = inventoryService.updateQuantityInItem(itemRequest);
+			return result;
 		} else {
 			// send notification
-			result = itemRequestRepository.save(itemRequest);
+			itemRequestRepository.save(itemRequest);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Requested quantity are not available");
 		}
 
-		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
 	@GetMapping("/item-request-list")

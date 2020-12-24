@@ -4,7 +4,6 @@ import Dashboard from "./dashboard";
 
 const Nav = ({ component: Component }) => {
   const renderRedirect = (props) => {
-      console.log(props);
     return (
       <>
         <Dashboard {...props}>

@@ -26,14 +26,14 @@ const StockRequestPage = (props) => {
             const resData = response.data;
             setFormValues({...formValues,products:resData});
         })
-    },[]); // eslint-disable-next-line
+    },[]);
 
     const handleChange = (e) => {
         setFormValues({ ...formValues, [e.target.name]: e.target.value })
     }
 
-    const handleselectedProduct = (data,event)=>{
-        const item = formValues.products.find((item)=>item.id==data); // eslint-disable-next-line
+    const handleselectedProduct = (data)=>{
+        const item = formValues.products.find((item)=>item.id==data);
         setFormValues({...formValues,itemCode:item.code,id:item.id});
 
     }

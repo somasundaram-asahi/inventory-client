@@ -2,57 +2,67 @@ import React, { useEffect, useState } from 'react'
 import { Table } from 'antd';
 import { Button, message } from 'antd';
 import axios from "axios";
-// import { Alert, Space } from 'antd';
 
 const ReviewTable = (props) => {
 
     const [review, setReview] = useState({
-        list: []
+        list: [],
+        // errorMessage:"error",
     })
-   const  refreshPage = () => {
+    const refreshPage = () => {
         window.location.reload();
-      }
-      const info = () => {
+    }
+    const info = () => {
         message.info('Requested Item is not available');
-      };
+    };
+
+    const errorInfo = () => {
+        message.info('Requested Item is not available, will be provided shortly');
+    };
 
     useEffect(() => {
         axios.get("/item-requested")
             .then(response => {
                 const result = response.data;
                 setReview({ ...review, list: result })
-                // console.log(response.data);
             })
-        // console.log(review);
-    }, [refreshPage])
+    }, [])
 
-    const handleReviewApproval= (record) => {
-        console.log(record);
-        // if(record.status === "REQUESTED"){
-
-        // }
-             props.history.push('/reviewtable');
-        // }
+    const handleReviewApproval = (record) => {
+        props.history.push('/reviewtable');
         const data = {
-            id:record.id,
+            id: record.id,
             itemCode: record.itemCode,
-            itemId:record.itemId,
-            quantity:record.quantity,
-            itemAvailable:record.itemAvailable,
+            itemId: record.itemId,
+            quantity: record.quantity,
+            itemAvailable: record.itemAvailable,
             requestedBy: "WAREHOUSE",
             status: "APPROVED"
         };
-        console.log("date: ", data);
-        axios.put("/item-request", data)
-        .then(response => {
-             refreshPage() 
-             const result = response.data;
-            setReview({ ...review, list: result })
-            console.log(response.data);
-        })
-       
+        // const errorMsg = () => {
+        //     message.info(errorMessage);
+        // };
+        if(data.quantity > data.itemAvailable){
+           errorInfo();
+        }else{
+            axios.put("/item-request", data)
+            .then(response => {
+                refreshPage()
+                const result = response.data;
+                setReview({ ...review, list: result })
+            })
+        }
+
+
+            // .catch(error => {
+            //    return(setReview({ ...review, errorMessage: error.response.data }))
+            
+                
+                // console.log(error.response.data)})
+
     }
-  
+ 
+
     const columns = [
         {
             title: 'Item Code',
@@ -78,10 +88,10 @@ const ReviewTable = (props) => {
             title: 'Action',
             render: (record) => (
                 <div>
-                    <Button type='primary' onClick = {()=>{handleReviewApproval(record)}} >
+                    <Button type='primary' onClick={() => { handleReviewApproval(record) }} >
                         Accept
                     </Button>
-                    <Button type='danger' style={{ marginLeft: "10px" }} onClick={()=>info()} >
+                    <Button type='danger' style={{ marginLeft: "10px" }} onClick={() => info()} >
                         Decline
                     </Button>
                 </div>
@@ -90,10 +100,10 @@ const ReviewTable = (props) => {
 
         }
     ];
-    
+
     return (
         <>
-        <Table columns={columns} dataSource={review.list} size="middle" />
+            <Table columns={columns} dataSource={review.list} size="middle" />
         </>
     )
 }

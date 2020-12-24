@@ -2,19 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { Table } from 'antd';
 import { Button, message } from 'antd';
 import axios from "axios";
-// import { Alert, Space } from 'antd';
 
 const ProductTable = (props) => {
 
     const [review, setReview] = useState({
         list: []
     })
-   const  refreshPage = () => {
+    const refreshPage = () => {
         window.location.reload();
-      }
-      const info = () => {
+    }
+    const info = () => {
         message.info('Requested Item is not available');
-      };
+    };
 
     useEffect(() => {
         axios.get("/products")
@@ -24,42 +23,38 @@ const ProductTable = (props) => {
             })
     }, [])
 
-    const handleReviewApproval= (record,action) => {
-        if(action==="accept"){
+    const handleReviewApproval = (record, action) => {
+        if (action === "accept") {
             props.history.push('/productdetails');
             const data = {
-                id:record.id,
+                id: record.id,
                 name: record.name,
-                quantity:record.quantity,
+                quantity: record.quantity,
                 status: "APPROVED"
             };
-            console.log("data: ", data);
             axios.put("/finished-product-approval", data)
-            .then(response => {
-                 refreshPage() 
-                 const result = response.data;
-                setReview({ ...review, list: result })
-                console.log(response.data);
-            })
-        }else{
+                .then(response => {
+                    refreshPage()
+                    const result = response.data;
+                    setReview({ ...review, list: result })
+                })
+        } else {
             props.history.push('/productdetails');
-        const data = {
-            id:record.id,
-            name: record.name,
-            quantity:record.quantity,
-            status: "REDO"
-        };
-        console.log("data: ", data);
-        axios.put("/finished-product-approval", data)
-        .then(response => {
-             refreshPage() 
-             const result = response.data;
-            setReview({ ...review, list: result })
-            console.log(response.data);
-        })
+            const data = {
+                id: record.id,
+                name: record.name,
+                quantity: record.quantity,
+                status: "REDO"
+            };
+            axios.put("/finished-product-approval", data)
+                .then(response => {
+                    refreshPage()
+                    const result = response.data;
+                    setReview({ ...review, list: result })
+                })
         }
-             
-       
+
+
     }
     const columns = [
         {
@@ -82,10 +77,10 @@ const ProductTable = (props) => {
             title: 'Action',
             render: (record) => (
                 <div>
-                    <Button type='primary' onClick = {()=>{handleReviewApproval(record,"accept")}} >
+                    <Button type='primary' onClick={() => { handleReviewApproval(record, "accept") }} >
                         Accept
                     </Button>
-                    <Button type='danger' style={{ marginLeft: "10px" }} onClick = {()=>{handleReviewApproval(record,"decline")}} >
+                    <Button type='danger' style={{ marginLeft: "10px" }} onClick={() => { handleReviewApproval(record, "decline") }} >
                         Decline
                     </Button>
                 </div>
@@ -94,10 +89,10 @@ const ProductTable = (props) => {
 
         }
     ];
-    
+
     return (
         <>
-        <Table columns={columns} dataSource={review.list} size="middle" />
+            <Table columns={columns} dataSource={review.list} size="middle" />
         </>
     )
 }
