@@ -13,10 +13,10 @@ import com.asahi.inventorymanagement.model.ItemRequest;
 @Repository
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> {
 	
-	@Query("from ItemRequest i where i.status='REQUESTED'")
+	@Query("from ItemRequest i where i.status='REQUESTED' OR i.status='DECLINED'")
      List<ItemRequest> fetchRequestedItems();
 	
-	@Query("from ItemRequest i where i.status='APPROVED'")
+	@Query("from ItemRequest i where i.status='APPROVED' OR i.status='DECLINED'")
     List<ItemRequest> fetchApprovedItems();
 
 }

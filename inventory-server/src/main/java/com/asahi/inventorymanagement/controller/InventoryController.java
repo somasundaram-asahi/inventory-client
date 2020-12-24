@@ -59,13 +59,14 @@ public class InventoryController {
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
 	}
 	
-
+	//item that are requested and declined
 	@GetMapping("/item-requested")
 	public List<ItemRequest> getItemRequest() {
 		List<ItemRequest>  itemrequest = itemRequestRepository.fetchRequestedItems();
 		return itemrequest;
 	}
 	
+	//item that are in approved state and declined 
 	@GetMapping("/item-approved")
 	public List<ItemRequest> getItemApproved() {
 		List<ItemRequest>  itemrequest = itemRequestRepository.fetchApprovedItems();
@@ -100,14 +101,14 @@ public class InventoryController {
 	// send with accepted status production to ?
 	@PutMapping("/item-request-approval")
 	public ResponseEntity<?> itemVerificationByProductionTeam(@RequestBody ItemRequest itemRequest) {
-		if (itemRequest.getStatus().equalsIgnoreCase("DECLINED")) {
-			// send mail to warehouse team
-			// again rerequest the same item
-			itemRequest.setStatus("REQUESTED");
-		} else {
-			// the manufacturing team will prepare the product and the product table will
-			// have an entry now with the finished product
-		}
+//		if (itemRequest.getStatus().equalsIgnoreCase("DECLINED")) {
+//			// send mail to warehouse team
+//			// again rerequest the same item
+////			itemRequest.setStatus("REQUESTED");
+//		} else {
+//			// the manufacturing team will prepare the product and the product table will
+//			// have an entry now with the finished product
+//		}
 		ItemRequest result = itemRequestRepository.save(itemRequest);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
@@ -136,12 +137,6 @@ public class InventoryController {
 		Product product = productRepository.save(productDetails);
 		return new ResponseEntity<>(product, HttpStatus.OK);
 	}
-
-	@GetMapping("/sales")
-	public List<Sales> getAllSalesProduct() {
-		List<Sales> salesProducts = salesRepository.findAll();
-		return salesProducts;
-	}
 	
 	@GetMapping("/product-in-testing")
 	public List<Product> getProductInTested() {
@@ -153,6 +148,13 @@ public class InventoryController {
 	public List<Product> getProductApproved() {
 		List<Product>  productApproved = productRepository.fetchProductsApproved();
 		return productApproved;
+	}
+	
+
+	@GetMapping("/sales")
+	public List<Sales> getAllSalesProduct() {
+		List<Sales> salesProducts = salesRepository.findAll();
+		return salesProducts;
 	}
 
 	@PutMapping("/sales-product-shipment")

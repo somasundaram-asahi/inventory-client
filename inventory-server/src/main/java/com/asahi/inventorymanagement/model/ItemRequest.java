@@ -28,6 +28,8 @@ public class ItemRequest {
 	private String status;
 
 	private Long itemId;
+	
+	private String reason;
 
 	private Integer itemAvailable;
 }
