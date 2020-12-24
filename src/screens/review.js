@@ -29,51 +29,43 @@ const ReviewTable = (props) => {
     }, [])
 
     const handleReviewApproval = (record) => {
-        props.history.push('/reviewtable');
+        props.history.push('/stockrequestreview');
+        console.log(record);
+        debugger;
         const data = {
             id: record.id,
             itemCode: record.itemCode,
+            itemName: record.itemName,
             itemId: record.itemId,
             quantity: record.quantity,
             itemAvailable: record.itemAvailable,
             requestedBy: "WAREHOUSE",
             status: "APPROVED"
         };
-        // const errorMsg = () => {
-        //     message.info(errorMessage);
-        // };
-        if(data.quantity > data.itemAvailable){
-           errorInfo();
-        }else{
+        if (data.quantity > data.itemAvailable) {
+            errorInfo();
+        } else {
+            debugger;
             axios.put("/item-request", data)
-            .then(response => {
-                refreshPage()
-                const result = response.data;
-                setReview({ ...review, list: result })
-            })
+                .then(response => {
+                    debugger;
+                    refreshPage()
+                    const result = response.data;
+                    setReview({ ...review, list: result })
+                })
         }
-
-
-            // .catch(error => {
-            //    return(setReview({ ...review, errorMessage: error.response.data }))
-            
-                
-                // console.log(error.response.data)})
-
     }
- 
-
     const columns = [
         {
             title: 'Item Code',
             dataIndex: 'itemCode',
         },
         {
-            title: 'Item Requested',
+            title: 'Quantity Requested',
             dataIndex: 'quantity',
         },
         {
-            title: 'Item Available',
+            title: 'Quantity Available',
             dataIndex: 'itemAvailable',
         },
         {
@@ -89,7 +81,7 @@ const ReviewTable = (props) => {
             render: (record) => (
                 <div>
                     <Button  disabled={record.status && record.status=== "DECLINED"} type='primary' onClick={() => { handleReviewApproval(record) }} >
-                        APPROVE
+                        Approve
                     </Button>
                     <Button disabled={record.status && record.status=== "DECLINED"}  type='danger' style={{ marginLeft: "10px" }} onClick={() => info()} >
                         Decline
@@ -100,7 +92,6 @@ const ReviewTable = (props) => {
 
         }
     ];
-
     return (
         <>
             <Table columns={columns} dataSource={review.list} size="middle" />

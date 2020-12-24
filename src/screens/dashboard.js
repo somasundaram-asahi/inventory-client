@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 
 const Dashboard = ({ children, location }) => {
+
     const { SubMenu } = Menu;
     const { Header, Content, Sider } = Layout;
     return (
@@ -20,17 +21,19 @@ const Dashboard = ({ children, location }) => {
                             defaultOpenKeys={['sub1']}
                             style={{ height: '100%' }}
                         >
-                            <SubMenu key="sub1" icon={<UserOutlined />} title="Stock Request">
-                                <Menu.Item key="/stockrequest"><Link to="/stockrequest">Request-Form</Link></Menu.Item>
-                                <Menu.Item key="/statusdetails"><Link to="/statusdetails">Status</Link></Menu.Item>
+                            
+                            <SubMenu key="sub1" className= {location.pathname === '/stockrequest'? "ant-menu-submenu-open ant-menu-submenu-selected" : ""}  icon={<UserOutlined />} title="Production">
+                                <Menu.Item key="/stockrequest" className= {location.pathname === '/stockrequest'? "ant-menu-item ant-menu-item-only-child ant-menu-item-selected" : ""}><Link to="/stockrequest">Request Rawmaterial</Link></Menu.Item>
+                                <Menu.Item key="/statusdetails" className= {location.pathname === '/statusdetails'? "ant-menu-item ant-menu-item-only-child ant-menu-item-selected" : ""}><Link to="/statusdetails">Request Status</Link></Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub2" icon={<UserOutlined />} title="WareHouse Team">
-                                <Menu.Item key="/reviewtable"><Link to="/reviewtable">Review-request</Link></Menu.Item>
+                            
+                            <SubMenu key="/stockrequestreview" className= {location.pathname === '/stockrequestreview'? "ant-menu-submenu-open ant-menu-submenu-selected" : ""}  icon={<UserOutlined />} title="Warehouse">
+                                <Menu.Item key="/stockrequestreview" className= {location.pathname === '/stockrequestreview'? "ant-menu-item ant-menu-item-only-child ant-menu-item-selected" : ""}><Link to="/stockrequestreview">Review Request</Link></Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub3" icon={<UserOutlined />} title="Quality-Analyst">
-                                <Menu.Item key="/productdetails"><Link to="/productdetails">Product Report</Link></Menu.Item>
+                            <SubMenu key="/productdetails" icon={<UserOutlined />} title="Quality Analysis">
+                                <Menu.Item key="/productdetails"><Link to="/productdetails">Production Report</Link></Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub4" icon={<UserOutlined />} title="Sales">
+                            <SubMenu key="/salesdetails" icon={<UserOutlined />} title="Sales">
                                 <Menu.Item key="/salesdetails"><Link to="/salesdetails">Sales Report</Link></Menu.Item>
                             </SubMenu>
                         </Menu>

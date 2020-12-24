@@ -54,6 +54,7 @@ public class InventoryController {
 	public ResponseEntity<?> getItemRequest(@RequestBody ItemRequest itemRequest) {
 		Integer availableItem = itemRepository.findById(itemRequest.getItemId()).get().getQuantity();
 		itemRequest.setItemAvailable(availableItem);
+		itemRequest.setItemName(itemRepository.findById(itemRequest.getItemId()).get().getName());
 		itemRequest.setRequestedBy("PRODUCTION");
 		ItemRequest result = itemRequestRepository.save(itemRequest);
 		return new ResponseEntity<>(result, HttpStatus.CREATED);
@@ -79,6 +80,7 @@ public class InventoryController {
 		ResponseEntity<?> result;
 		if (itemRequest.getStatus().equalsIgnoreCase("APPROVED")) {
 			result = inventoryService.updateQuantityInItem(itemRequest);
+			itemRequestRepository.save(itemRequest);
 			return result;
 		} else {
 			// send notification

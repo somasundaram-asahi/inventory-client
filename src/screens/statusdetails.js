@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Button } from 'antd';
+import { Table, Button,message } from 'antd';
 import axios from "axios";
 
 const ReviewTable = (props) => {
@@ -16,7 +16,7 @@ const ReviewTable = (props) => {
                 const result = response.data;
                 setReview({ ...review, list: result })
             })
-    }, [refreshPage])
+    }, [])
 
     const handleReviewApproval = (record, action) => {
 
@@ -27,26 +27,47 @@ const ReviewTable = (props) => {
                 itemCode: record.itemCode,
                 itemId: record.itemId,
                 quantity: record.quantity,
-                itemAvailable: record.itemAvailable,
+                itemName: record.itemName,
                 requestedBy: "PRODUCTION",
                 status: "ACCEPTED"
             };
-            axios.put("/item-request", data)
+            axios.put("/item-request-approval", data)
                 .then(response => {
                     refreshPage()
                     const result = response.data;
                     setReview({ ...review, list: result })
                 })
-        } else {
+        } 
+        else {
             props.history.push('/statusdetails');
             const data = {
                 id: record.id,
                 itemCode: record.itemCode,
                 itemId: record.itemId,
                 quantity: record.quantity,
-                itemAvailable: record.itemAvailable,
+                itemName: record.itemName,
                 requestedBy: "PRODUCTION",
-                status: "REQUESTED"
+                status: "DECLINED"
+            };
+            axios.put("/item-request-approval", data)
+                .then(response => {
+                    refreshPage()
+                    const result = response.data;
+                    setReview({ ...review, list: result })
+                })
+        }
+    }
+    const info = (record) => {
+        {
+            props.history.push('/statusdetails');
+            const data = {
+                id: record.id,
+                itemCode: record.itemCode,
+                itemId: record.itemId,
+                quantity: record.quantity,
+                itemName: record.itemName,
+                requestedBy: "PRODUCTION",
+                status: "DECLINED"
             };
             axios.put("/item-request", data)
                 .then(response => {
@@ -55,23 +76,23 @@ const ReviewTable = (props) => {
                     setReview({ ...review, list: result })
                 })
         }
-    }
-
+        message.info('The Item is not the same which requested');
+    };
     const columns = [
         {
             title: 'Item Code',
             dataIndex: 'itemCode',
         },
         {
-            title: 'Item Requested',
+            title: 'Item Name',
+            dataIndex: 'itemName',
+        },
+        {
+            title: 'Quantity Requested',
             dataIndex: 'quantity',
         },
         {
-            title: 'Item Available',
-            dataIndex: 'itemAvailable',
-        },
-        {
-            title: 'Requested By',
+            title: 'Updated By',
             dataIndex: 'requestedBy',
         },
         {
@@ -83,7 +104,7 @@ const ReviewTable = (props) => {
             render: (record) => (
                 <div>
                     <Button type='primary' disabled={record.status && record.status=== "DECLINED"} onClick={() => { handleReviewApproval(record, "accept") }}>
-                        APPROVE
+                        Approve
                     </Button>
 
                     <Button type='danger'  disabled={record.status && record.status=== "DECLINED"} style={{ marginLeft: "10px" }} onClick={() => { handleReviewApproval(record, "decline") }}>
@@ -96,32 +117,7 @@ const ReviewTable = (props) => {
         }
     ];
 
-    // const data = [
-    //     {
-    //         key: '1',
-    //         name: 'Screws',
-    //         id: 1,
-    //         quantity: 3,
-    //         requestedby: 'John',
-    //         status: 'Approved',
-    //     },
-    //     {
-    //         key: '2',
-    //         name: 'Nuts',
-    //         id: 2,
-    //         quantity: 5,
-    //         requestedby: 'Jim',
-    //         status: 'Approved',
-    //     },
-    //     {
-    //         key: '3',
-    //         name: 'Studs',
-    //         id: 3,
-    //         quantity: 8,
-    //         requestedby: 'Joe',
-    //         status: 'Rejected',
-    //     },
-    // ];
+   
     return (
         <Table columns={columns} dataSource={review.list} align="middle" />
     )

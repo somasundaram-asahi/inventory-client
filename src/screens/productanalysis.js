@@ -77,7 +77,7 @@ const ProductTable = (props) => {
             title: 'Action',
             render: (record) => (
                 <div>
-                    <Button  disabled={record.status && record.status=== "APPROVED"} type='primary' onClick={() => { handleReviewApproval(record, "accept") }} >
+                    <Button  disabled={record.status && record.status=== "APPROVED"}  type='primary' onClick={() => { handleReviewApproval(record, "accept") }} >
                         Accept
                     </Button>
                     <Button disabled={record.status && record.status=== "APPROVED"} type='danger' style={{ marginLeft: "10px" }} onClick={() => { handleReviewApproval(record, "decline") }} >

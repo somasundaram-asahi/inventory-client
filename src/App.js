@@ -18,7 +18,7 @@ function App() {
       <Nav path="/stockrequest" exact component ={StockRequestPage} />
       <Nav path="/request" exact component ={RequestDetails} />
       <Nav path="/login" exact component ={LoginPage} />
-      <Nav path="/reviewtable" exact component ={ReviewTable} />
+      <Nav path="/stockrequestreview" exact component ={ReviewTable} />
       <Nav path="/statusdetails" exact component ={StatusDetails} />
       <Nav path="/productdetails" exact component ={Product} />
       <Nav path="/salesdetails" exact component ={Sales} />

@@ -17,7 +17,7 @@ const StockRequestPage = (props) => {
         products: [],
         itemCode:"",
         quantity:"",
-        id:"",
+        id:""
     });
 
     useEffect(() => {
@@ -48,7 +48,7 @@ const StockRequestPage = (props) => {
     axios.post('/item-request', data)
         .then(response => {
             if(response.status == 201){
-                props.history.push('/reviewtable');
+                props.history.push('/stockrequestreview');
             }
         });
  }
