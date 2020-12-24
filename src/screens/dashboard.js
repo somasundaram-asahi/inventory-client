@@ -23,7 +23,7 @@ const Dashboard = ({ children, location }) => {
                         >
                             
                             <SubMenu key="sub1" className= {location.pathname === '/stockrequest'? "ant-menu-submenu-open ant-menu-submenu-selected" : ""}  icon={<UserOutlined />} title="Production">
-                                <Menu.Item key="/stockrequest" className= {location.pathname === '/stockrequest'? "ant-menu-item ant-menu-item-only-child ant-menu-item-selected" : ""}><Link to="/stockrequest">Request Rawmaterial</Link></Menu.Item>
+                                <Menu.Item key="/stockrequest" className= {location.pathname === '/stockrequest'? "ant-menu-item ant-menu-item-only-child ant-menu-item-selected" : ""}><Link to="/stockrequest">Request Raw Material</Link></Menu.Item>
                                 <Menu.Item key="/statusdetails" className= {location.pathname === '/statusdetails'? "ant-menu-item ant-menu-item-only-child ant-menu-item-selected" : ""}><Link to="/statusdetails">Request Status</Link></Menu.Item>
                             </SubMenu>
                             
@@ -43,7 +43,7 @@ const Dashboard = ({ children, location }) => {
                             <div className="logo" />
                             <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
                                 <Menu.Item></Menu.Item>
-                                <Menu.Item key="1">Production Manager</Menu.Item>
+                                <Menu.Item key="1">User</Menu.Item>
                             </Menu>
                         </Header>
                         <Content

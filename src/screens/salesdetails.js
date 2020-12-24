@@ -50,8 +50,8 @@ const SalesTable = () => {
             render: (record) => {
                 console.log(record);
                 return <div>
-                    <Button  type='primary' disabled={record.status && record.status=== "EXPORTED"} onClick={() => { handleReviewApproval(record) }}>
-                        EXPORT
+                    <Button  type='primary' disabled={record.status && record.status=== "SHIPPED"} onClick={() => { handleReviewApproval(record) }}>
+                        Ship Order
                     </Button>
                 </div>
             },
