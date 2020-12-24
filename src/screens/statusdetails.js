@@ -82,11 +82,11 @@ const ReviewTable = (props) => {
             title: 'Action',
             render: (record) => (
                 <div>
-                    <Button type='primary' onClick={() => { handleReviewApproval(record, "accept") }}>
-                        Accept
+                    <Button type='primary' disabled={record.status && record.status=== "DECLINED"} onClick={() => { handleReviewApproval(record, "accept") }}>
+                        APPROVE
                     </Button>
 
-                    <Button type='danger' style={{ marginLeft: "10px" }} onClick={() => { handleReviewApproval(record, "decline") }}>
+                    <Button type='danger'  disabled={record.status && record.status=== "DECLINED"} style={{ marginLeft: "10px" }} onClick={() => { handleReviewApproval(record, "decline") }}>
                         Decline
                     </Button>
                 </div>

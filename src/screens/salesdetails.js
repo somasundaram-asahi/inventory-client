@@ -1,22 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { Table } from 'antd';
+import { Table,Button} from 'antd';
 import axios from "axios";
 
 const SalesTable = () => {
 
+    var salesStatus;
+
     const [review, setReview] = useState({
-        list: []
-    })
+        list: [],
+        disabled: false,
+        // statusNew:"",
+        })
     useEffect(() => {
         axios.get("/sales")
             .then(response => {
                 const result = response.data;
                 setReview({ ...review, list: result })
+                // setReview({...review,statusNew:result.data.status})
             })
+            console.log(review.list.status);
     }, []);
+
+    const handleReviewApproval = (record, action) => {}
+
+
     const columns = [
         {
-            title: 'ID',
+            title: 'ORDER ID',
             dataIndex: 'id',
         },
         {
@@ -28,9 +38,26 @@ const SalesTable = () => {
             dataIndex: 'productName',
         },
         {
+            title:'Quantity',
+            dataIndex: 'quantity'
+        },
+        {
             title: 'Status',
             dataIndex: 'status',
         },
+        {
+            title: 'Action',
+            render: (record) => {
+                console.log(record);
+                return <div>
+                    <Button  type='primary' disabled={record.status && record.status=== "EXPORTED"} onClick={() => { handleReviewApproval(record) }}>
+                        EXPORT
+                    </Button>
+                </div>
+            },
+
+
+        }
     ];
 
     return (
