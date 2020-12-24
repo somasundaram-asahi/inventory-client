@@ -20,6 +20,8 @@ public class ItemRequest {
 	private Long id;
 
 	private String itemCode;
+	
+	private String itemName;
 
 	private Integer quantity;
 

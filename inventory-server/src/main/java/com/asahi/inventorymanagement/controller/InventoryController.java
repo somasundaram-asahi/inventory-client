@@ -126,6 +126,7 @@ public class InventoryController {
 			Sales salesDetails = new Sales();
 			salesDetails.setProductId(productDetails.getId());
 			salesDetails.setProductName(productDetails.getName());
+			salesDetails.setQuantity(productDetails.getQuantity());
 			salesDetails.setStatus("RECEIVED");
 			salesRepository.save(salesDetails);
 			// move the product to sales table

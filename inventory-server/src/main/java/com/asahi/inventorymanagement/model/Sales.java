@@ -23,6 +23,8 @@ public class Sales {
 	private Long productId;
 
 	private String productName;
+	
+	private Integer quantity;
 
 	private String status;
 }
