@@ -2,26 +2,41 @@ import React, { useEffect, useState } from 'react'
 import { Table,Button} from 'antd';
 import axios from "axios";
 
-const SalesTable = () => {
-
-    var salesStatus;
+const SalesTable = (props) => {
+    const refreshPage = () => {
+        window.location.reload();
+    }
 
     const [review, setReview] = useState({
         list: [],
         disabled: false,
-        // statusNew:"",
         })
     useEffect(() => {
         axios.get("/sales")
             .then(response => {
                 const result = response.data;
                 setReview({ ...review, list: result })
-                // setReview({...review,statusNew:result.data.status})
             })
-            console.log(review.list.status);
     }, []);
 
-    const handleReviewApproval = (record, action) => {}
+    const handleReviewApproval = (record, action) => {
+
+            props.history.push('/salesdetails');
+            const data = {
+                "id": record.id,
+                "productId": record.productId,
+                "productName": record.productName,
+                "quantity": record.quantity,
+                "status": "SHIPPED"
+            };
+            axios.put("/sales-product-shipment", data)
+                .then(response => {
+                    refreshPage()
+                    const result = response.data;
+                    setReview({ ...review, list: result })
+                })
+        
+    }
 
 
     const columns = [

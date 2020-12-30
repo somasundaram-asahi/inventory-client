@@ -28,7 +28,8 @@ const ReviewTable = (props) => {
             })
     }, [])
 
-    const handleReviewApproval = (record) => {
+    const handleReviewApproval = (record,action) => {
+        if(action === "accept"){
         props.history.push('/stockrequestreview');
         console.log(record);
         debugger;
@@ -55,6 +56,29 @@ const ReviewTable = (props) => {
                 })
         }
     }
+    else
+    {
+        props.history.push('/stockrequestreview');
+        console.log(record);
+        debugger;
+        const data = {
+            id: record.id,
+            itemCode: record.itemCode,
+            itemName: record.itemName,
+            itemId: record.itemId,
+            quantity: record.quantity,
+            itemAvailable: record.itemAvailable,
+            requestedBy: "WAREHOUSE",
+            status: "DECLINED"
+        };
+            axios.put("/item-request", data)
+                .then(response => {
+                    // refreshPage()
+                    const result = response.data;
+                    setReview({ ...review, list: result })
+                })
+    }
+    }
     const columns = [
         {
             title: 'Item Code',
@@ -80,10 +104,10 @@ const ReviewTable = (props) => {
             title: 'Action',
             render: (record) => (
                 <div>
-                    <Button  disabled={record.status && record.status=== "DECLINED"} type='primary' onClick={() => { handleReviewApproval(record) }} >
+                    <Button  disabled={record.status && record.status=== "DECLINED"} type='primary' onClick={() => { handleReviewApproval(record,"accept") }} >
                         Approve
                     </Button>
-                    <Button disabled={record.status && record.status=== "DECLINED"}  type='danger' style={{ marginLeft: "10px" }} onClick={() => info()} >
+                    <Button disabled={record.status && record.status=== "DECLINED"}  type='danger' style={{ marginLeft: "10px" }} onClick={() => handleReviewApproval(record,"decline")} >
                         Decline
                     </Button>
                 </div>
